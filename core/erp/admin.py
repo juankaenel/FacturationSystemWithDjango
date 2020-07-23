@@ -1,3 +1,7 @@
+#Django
 from django.contrib import admin
+#Local
+from core.erp.models import *
 
-# Register your models here.
+admin.site.register(Category)
+

@@ -1,27 +1,15 @@
+# Django
 from django.db import models
+
+# Local
 from datetime import datetime
-
-class Type(models.Model):
-    """
-    Type Model, related to one to many with employee
-    """
-    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Tipo' #Nombre que lleva cuando registre mi aplicación en el modulo de administración de django
-        verbose_name_plural = 'Tipos'
-        db_table = 'tipo' #nombre de la tabla
-        ordering = ['id'] #ordena por id de forma ascendente, si queremos que sea descendente [-id]
 
 
 class Category(models.Model):
     """
-      Category Model, related to many to many with employee
+      Category Model
     """
-    name = models.CharField(max_length=150, verbose_name='Nombre')
+    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
 
     def __str__(self):
         return self.name
@@ -32,31 +20,79 @@ class Category(models.Model):
         db_table = 'categoria'  # nombre de la tabla
         ordering = ['id']  # ordena por id de forma ascendente, si queremos que sea descendente [-id]
 
+class Product(models.Model):
+    """
+    Product Model
+    """
+    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
+    cate = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True)
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
-class Employee(models.Model):
+    def __str__(self):
+        return self.name
+
+
+    class Meta:
+        verbose_name = 'Producto'
+        verbose_name_plural = 'Productos'
+        db_table = 'producto'
+        ordering = ['id']
+
+class Client(models.Model):
     """
-    Employee Model
+    Client Model
     """
-    category = models.ManyToManyField(Category)
-    type = models.ForeignKey(Type,on_delete=models.CASCADE)  #tabla de pertenencia le pertence el fk, un empleado tiene un tipo, y un tipo puede tener muchos empleados
-    names = models.CharField(max_length=150,verbose_name='Nombres')
-    dni = models.CharField(max_length=10,unique=True,verbose_name='Dni')
-    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha de registro')
-    date_creation = models.DateField(auto_now=True) #solo se actualiza cuando se crea a la fecha actual
-    date_updated = models.DateTimeField(auto_now_add=True) #se actualiza cada vez que se cambia algo en la tabla gracias al _add
-    age = models.PositiveIntegerField(default=0)
-    salary = models.DecimalField(default=0.00, max_digits=9, decimal_places=2) #hasta 9 y la coma hasta 2
-    state = models.BooleanField(default=True)
-    avatar = models.ImageField(upload_to='avatar/%Y/%m/%d', null=True, blank=True) # la imagen se guarda en la carpeta avatar con el orden de año mes y dia
-    cvitae = models.FileField(upload_to='cvitae/%Y/%m/%d', null=True, blank=True)
+    names = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
+    last_names = models.CharField(max_length=150)
+    dni = models.IntegerField()
+    birth_date = models.DateTimeField()
+    direction = models.CharField(max_length=50)
+    sex = models.CharField(max_length=12)
 
     def __str__(self):
         return self.names
 
     class Meta:
-        verbose_name = 'Empleado'
-        verbose_name_plural = 'Empleados'
-        db_table = 'empleado'
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clientes'
+        db_table = 'cliente'
         ordering = ['id']
 
+class Sale(models.Model):
+    """
+        Sale Model
+    """
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)  # FK, tabla de pertenencia
+    sale_date = models.DateField(default=datetime.now)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
+    def __str__(self):
+        return self.client
+
+    class Meta:
+        verbose_name = 'Venta'
+        verbose_name_plural = 'Ventass'
+        db_table = 'venta'
+        ordering = ['id']
+
+class DetSale(models.Model):
+    """
+        DetSale Model
+    """
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE)     #FK
+    prod = models.ForeignKey(Product, on_delete=models.CASCADE)  #FK
+    price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    cant = models.IntegerField(default=0)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+
+    def __str__(self):
+        return self.sale
+
+    class Meta:
+        verbose_name = 'Detalle Venta'
+        verbose_name_plural = 'Detalles de ventas'
+        db_table = 'detalle_venta'
+        ordering = ['id']
