@@ -1,5 +1,7 @@
 {% extends 'body.html' %}
 
+{% load widget_tweaks %} <!--cargo la libreria  widget_tweaks-->
+
 {% block content %}
     <form method="POST" action=".">
         <div class="card card-default">
@@ -11,7 +13,19 @@
             </div>
             <div class="card-body">
                 {% csrf_token %}
-                {{ form }} <!--renderizo CategoryForm creado en forms.py-->
+                {% for field in form.visible_fields %} <!--itero cada campo visible-->
+                    <div class="form-group">
+                        <label for="email">{{ field.label }}</label>
+                        {% comment %}En caso de usar la libreria widget_tweaks{% endcomment %}
+                        {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+
+
+                       {% comment %} {{ field}}         en caso de que no use la libreria  widget_tweaks {% endcomment %}
+                    </div>
+
+                {% endfor %}
+
+                <!--{% comment %} {{ form }}{% endcomment %} renderizo CategoryForm creado en forms.py-->
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary btn-flat " id="btnTest">
