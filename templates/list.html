@@ -33,7 +33,7 @@
             </table>
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary btn-flat">
+            <button class="btn btn-primary btn-flat " id="btnTest">
                 <i class="fas fa-plus"></i> Nuevo registro
             </button>
         </div>
@@ -46,9 +46,26 @@
             $('#data').DataTable({
                 responsive: true,
                 autoWidth: false, //esto me permite ajustar a gusto el tamaño de mi tabla
-               /* "lenguaje": {   url: '{% static 'lib/datatables-1.10.20/spanish.txt' %}'  }*/
+                /* "lenguaje": {   url: '{% static 'lib/datatables-1.10.20/spanish.txt' %}'  }*/
+            });
+
+            $('#btnTest').on('click', function () {
+                $.ajax({
+                    url: '{% url 'erp:category_list' %}',
+                    type: 'POST',
+                    data: {id:1},
+                    dataType: 'json',
+                }).done(function (data) {
+                    console.log(data) //si tod0 sale bien
+                }).fail(function (jqXHR,textStatus,errorThrown) {
+                     alert(textStatus + ': ' +errorThrown)
+                }).always(function () {
+                    console.log('complete') //se imprime siempre
+                })
+
             });
         })
+
     </script>
 
 {% endblock %}

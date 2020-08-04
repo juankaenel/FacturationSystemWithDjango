@@ -4,6 +4,8 @@ from django.db import models
 # Local
 from datetime import datetime
 
+from django.forms import model_to_dict
+
 
 class Category(models.Model):
     """
@@ -14,11 +16,19 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def toJson(self): #convierte a json los datos
+        #item = {'id': self.id,'name': self.name}
+        item = model_to_dict(self,exclude=['']) #este metodo ya me transforma el modelo entero a diccionario asi no tenemos que estar definiendo como arriba
+        return item
+
+
     class Meta:
         verbose_name = 'Categoria'  # Nombre que lleva cuando registre mi aplicación en el modulo de administración de django
         verbose_name_plural = 'Categorias'
         db_table = 'categoria'  # nombre de la tabla
         ordering = ['id']  # ordena por id de forma ascendente, si queremos que sea descendente [-id]
+
+
 
 class Product(models.Model):
     """
