@@ -13,7 +13,6 @@
             </div>
             <div class="card-body">
                 {% csrf_token %}
-
                 {% comment %}{% if form.errors %}                               Solo dejaré como ejemplo la otra forma de capturar errores en el formulario porque voy a hacer uso de la libreria sweetalert2
                     <div class="alert alert-danger alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
@@ -28,7 +27,7 @@
                         </ul>
                     </div>
                 {% endif %}{% endcomment %}
-
+                <input type="hidden" name="action" value="{{ action }}">
                 {% for field in form.visible_fields %} <!--itero cada campo visible-->
                     <div class="form-group">
                         <label for="email">{{ field.label }}</label>
@@ -63,6 +62,32 @@
                 icon: 'error',
             })
         {% endif %}
+
+        $('form').on('submit',function (e){
+            e.preventDefault();
+            let parameters= $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
+            $.ajax({
+                    url: '{% url 'erp:category_create' %}',
+                    type: 'POST',
+                    data: parameters, //le mando los parametros del formulario
+                    dataType: 'json',
+                }).done(function (data) {//si tod0 sale bien
+                    if(!data.hasOwnProperty('error')){//si no detecta error
+                        location.href='{{ list_url }}';
+                        return false; //para salir del proceso
+                    }
+                    //else
+
+                    message_error(data.error);
+
+                }).fail(function (jqXHR,textStatus,errorThrown) {
+                     alert(textStatus + ': ' +errorThrown)
+                }).always(function () {
+                    //console.log('complete') //se imprime siempre
+                });
+        })
+
+
 
     </script>
 

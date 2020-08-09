@@ -40,3 +40,16 @@ class CategoryForm(ModelForm):
             )
 
         }
+
+    #redefino el metodo save
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error']=form.errors
+        except Exception as e:
+            print(e)
+        return data
