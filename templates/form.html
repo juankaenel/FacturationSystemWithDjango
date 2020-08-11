@@ -63,30 +63,30 @@
             })
         {% endif %}
 
-        $('form').on('submit',function (e){
+        $('form').on('submit', function (e) {
             e.preventDefault();
-            let parameters= $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
+            let parameters = $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
             $.ajax({
-                    url: '{% url 'erp:category_create' %}',
-                    type: 'POST',
-                    data: parameters, //le mando los parametros del formulario
-                    dataType: 'json',
-                }).done(function (data) {//si tod0 sale bien
-                    if(!data.hasOwnProperty('error')){//si no detecta error
-                        location.href='{{ list_url }}';
-                        return false; //para salir del proceso
-                    }
-                    //else
+                //url: '{% url 'erp:category_create' %}',
+                url: window.location.pathname,
+                type: 'POST',
+                data: parameters, //le mando los parametros del formulario
+                dataType: 'json',
+            }).done(function (data) {//si tod0 sale bien
+                if (!data.hasOwnProperty('error')) {//si no detecta error
+                    location.href = '{{ list_url }}';
+                    return false; //para salir del proceso
+                }
+                //else
 
-                    message_error(data.error);
+                message_error(data.error);
 
-                }).fail(function (jqXHR,textStatus,errorThrown) {
-                     alert(textStatus + ': ' +errorThrown)
-                }).always(function () {
-                    //console.log('complete') //se imprime siempre
-                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown)
+            }).always(function () {
+                //console.log('complete') //se imprime siempre
+            });
         })
-
 
 
     </script>

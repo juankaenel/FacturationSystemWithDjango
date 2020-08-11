@@ -14,9 +14,10 @@
             <td>{{ category.id }}</td>
             <td>{{ category.name }}</td>
             <td>
-                <button type="button" class="btn btn-warning btn-xs btn-flat">
+                <!--le debi oasar el id a la hora de editar una categoria--->
+                <a href="{% url 'erp:category_update' category.id %}" type="button" class="btn btn-warning btn-xs btn-flat">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">
                     <i class="fas fa-trash-alt"></i>
                 </button>
