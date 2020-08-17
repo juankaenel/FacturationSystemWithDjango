@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView  # Vistas genéricas
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView  # Vistas genéricas
 # erp
 from core.erp.forms import CategoryForm
 from core.erp.models import Category
@@ -64,7 +64,6 @@ class CategoryListView(ListView):
         context['list_url'] = reverse_lazy('erp:category_list')
         return context
 
-
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm  # le paso el formulario basado en clases
@@ -95,7 +94,6 @@ class CategoryCreateView(CreateView):
         context['list_url'] = reverse_lazy('erp:category_list')
         context['action'] = 'add'  # action la usamos para verificar el tipo de acción se quiere realizar
         return context
-
 
 class CategoryUpdateView(UpdateView):
     model = Category
@@ -128,7 +126,6 @@ class CategoryUpdateView(UpdateView):
         context['action'] = 'edit'  # action la usamos para verificar el tipo de acción se quiere realizar
         return context
 
-
 class CategoryDeleteView(DeleteView):
     model = Category
     template_name = 'category/delete.html'  # le paso el template
@@ -153,4 +150,29 @@ class CategoryDeleteView(DeleteView):
         context['entity'] = 'Categorías'
         context['list_url'] = reverse_lazy('erp:category_list')
         context['action'] = 'edit'  # action la usamos para verificar el tipo de acción se quiere realizar
+        return context
+
+class CategoryFormView(FormView):
+    """
+    Verifica que mi formulario sea válido y retornará hacia la url de éxito
+    """
+    form_class = CategoryForm
+    template_name = 'category/create.html'
+    success_url = reverse_lazy('erp:category_list')
+
+    def form_invalid(self, form):
+        print(form.is_valid()) #true o false si es valido
+        print(form.errors)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        print(form.is_valid())
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Form | Categoría'
+        context['entity'] = 'Categorías'
+        context['list_url'] = reverse_lazy('erp:category_list')
+        context['action'] = 'add'  # action la usamos para verificar el tipo de acción se quiere realizar
         return context

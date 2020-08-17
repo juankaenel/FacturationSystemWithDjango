@@ -53,3 +53,16 @@ class CategoryForm(ModelForm):
         except Exception as e:
             print(e)
         return data
+
+    #metodo que obtiene los errores del formulario
+    def clean(self):
+        cleaned = super().clean()
+        if len(cleaned['name']) <= 50: #si el campo nombre tiene menos de 50 caracteres salta el error
+            self.add_error('name', 'Le faltan caracteres')
+            #raise forms.ValidationError('Validación xxx')
+            # si uso esto en el html lo debo capturar con {{% form.non_field_errors  %}} y después en el script iterarlo
+            # {% for error in form.non_field_errors %}
+            #  errors += '{{error}}\n';
+            # {%endfor%}
+        #print(cleaned)
+        return cleaned
