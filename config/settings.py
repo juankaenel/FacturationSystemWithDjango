@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     #apps
     'core.erp',
-    'core.homepage'
+    'core.homepage',
+    'core.login'
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,5 @@ STATICFILES_FINDERS =[
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
+
+LOGIN_REDIRECT_URL = '/erp/category/list'

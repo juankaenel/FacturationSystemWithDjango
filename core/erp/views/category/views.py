@@ -160,14 +160,14 @@ class CategoryFormView(FormView):
     template_name = 'category/create.html'
     success_url = reverse_lazy('erp:category_list')
 
-    def form_invalid(self, form):
-        print(form.is_valid()) #true o false si es valido
-        print(form.errors)
-        return super().form_invalid(form)
-
-    def form_valid(self, form):
-        print(form.is_valid())
-        return super().form_valid(form)
+    # def form_invalid(self, form):
+    #     print(form.is_valid()) #true o false si es valido
+    #     print(form.errors)
+    #     return super().form_invalid(form)
+    #
+    # def form_valid(self, form):
+    #     print(form.is_valid())
+    #     return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
