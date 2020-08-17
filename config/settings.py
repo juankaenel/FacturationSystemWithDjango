@@ -135,3 +135,4 @@ STATICFILES_FINDERS =[
 ]
 
 LOGIN_REDIRECT_URL = '/erp/category/list'
+LOGOUT_REDIRECT_URL = '/login/'

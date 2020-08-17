@@ -14,6 +14,8 @@
   <link href="{% static 'img/favicon.png' %}" rel="icon">
   <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'lib/admin-lte3/plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
@@ -62,6 +64,7 @@
           <li><a href="#portfolio"><i class="bx bx-book-content"></i> Portfolio</a></li>
           <li><a href="#services"><i class="bx bx-server"></i> Services</a></li>
           <li><a href="#contact"><i class="bx bx-envelope"></i> Contact</a></li>
+          <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login </a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
