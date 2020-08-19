@@ -2,6 +2,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView, LogoutView #vista genérica login view, logout view
 from django.shortcuts import redirect
+import config.settings as setting
 #Segundo Método
 #from django.urls import reverse_lazy
 #from django.views.generic import FormView
@@ -28,7 +29,7 @@ class LoginFormView(LoginView):
     def dispatch(self, request, *args, **kwargs):
         #el usuario lo sacamos a través del request
         if request.user.is_authenticated: #si se encuentra logeado
-            return redirect('erp:category_list')
+            return redirect(setting.LOGIN_REDIRECT_URL)
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -44,7 +45,7 @@ class LoginFormView(LoginView):
 #     """
 #     template_name = 'login.html'
 #     form_class = AuthenticationForm
-#     success_url = reverse_lazy('erp:category_list')
+#     success_url = reverse_lazy(setting.LOGIN_REDIRECT_URL)
 #
 #
 #     def dispatch(self, request, *args, **kwargs):

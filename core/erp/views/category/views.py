@@ -1,4 +1,5 @@
 # Django
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -23,7 +24,8 @@ class CategoryListView(ListView):
     model = Category
     template_name = 'category/list.html'
 
-    @method_decorator(csrf_exempt)  # decorador para habilitar el crsf
+    @method_decorator(login_required) #debo definir el login_url en settings para la redireccion en caso q no esté logueado
+    @method_decorator(csrf_exempt)  # decorador para deshabilitar el crsf
     # reescribimos el metodo dispatch
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
@@ -71,6 +73,11 @@ class CategoryCreateView(CreateView):
     success_url = reverse_lazy(
         'erp:category_list')  # una vez que se ejecute dicho formulario redireccioname a category list
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         data = {}
         # print(request.POST)
@@ -101,6 +108,7 @@ class CategoryUpdateView(UpdateView):
     template_name = 'category/create.html'  # le paso el template
     success_url = reverse_lazy('erp:category_list')
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
@@ -131,6 +139,7 @@ class CategoryDeleteView(DeleteView):
     template_name = 'category/delete.html'  # le paso el template
     success_url = reverse_lazy('erp:category_list')
 
+    @method_decorator(login_required)
     # method_decorator(csrf_exempt) #con esto me evito enviarle parametros en ajax a través del data
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()  # la asignamos para que pueda hacer uso en el metodo post

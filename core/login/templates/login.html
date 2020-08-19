@@ -27,6 +27,8 @@
         <div class="card-body login-card-body">
             <p class="login-box-msg">Ingrese sus credenciales para ingresar al sistema</p>
             <form action="." method="post">
+                {# Me va a redireccionar al valor que contenga next en la url#}
+                <input type="hidden" name="next" value="{{ next }}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
                     {{ form.username|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su nombre de usuario' }}
@@ -77,12 +79,12 @@
         {% endif %}
     </script>
 </div>
-    <!-- /.login-box -->
-    <!-- jQuery -->
-    <script src="{% static 'lib/admin-lte3/plugins/jquery/jquery.min.js' %}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{% static 'lib/admin-lte3/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <!-- AdminLTE App -->
-    <script src="{% static 'lib/admin-lte3/js/adminlte.min.js' %}"></script>
+<!-- /.login-box -->
+<!-- jQuery -->
+<script src="{% static 'lib/admin-lte3/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'lib/admin-lte3/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'lib/admin-lte3/js/adminlte.min.js' %}"></script>
 </body>
 </html>
