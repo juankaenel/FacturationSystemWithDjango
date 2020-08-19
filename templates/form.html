@@ -54,47 +54,47 @@
     </form>
 
     <script>
-        {% if form.errors %}
-            let errors = '';
-            {% for field in  form %}
-                {% for error in field.errors %}
-                    errors += '{{ error }}\n';
-                {% endfor %}
-            {% endfor %}
-            Swal.fire({ //Sweet Alert
-                title: 'Error!',
-                text: errors, //le paso el error atrapado en el form
-                icon: 'error',
-            })
-        {% endif %}
+{#        {% if form.errors %}#}
+{#            let errors = '';#}
+{#            {% for field in  form %}#}
+{#                {% for error in field.errors %}#}
+{#                    errors += '{{ error }}\n';#}
+{#                {% endfor %}#}
+{#            {% endfor %}#}
+{#            Swal.fire({ //Sweet Alert#}
+{#                title: 'Error!',#}
+{#                text: errors, //le paso el error atrapado en el form#}
+{#                icon: 'error',#}
+{#            })#}
+{#        {% endif %}#}
 
         //manejo de errores con ajax
-        {#$('form').on('submit', function (e) {#}
-        {#    e.preventDefault();#}
-        {#    let parameters = $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario#}
-        {#    $.ajax({#}
-        {#        //url: '{% url 'erp:category_create' %}',#}
-        {#        url: window.location.pathname,#}
-        {#        type: 'POST',#}
-        {#        data: parameters, //le mando los parametros del formulario#}
-        {#        dataType: 'json',#}
-        {#    }).done(function (data) {//si tod0 sale bien#}
-        {#        if (!data.hasOwnProperty('error')) {//si no detecta error#}
-        {#            location.href = '{{ list_url }}';#}
-        {#            return false; //para salir del proceso#}
-        {#        }#}
-        {#        //else#}
-        {##}
-        {#        message_error(data.error);#}
-        {##}
-        {#    }).fail(function (jqXHR, textStatus, errorThrown) {#}
-        {#        alert(textStatus + ': ' + errorThrown)#}
-        {#    }).always(function () {#}
-        {#        //console.log('complete') //se imprime siempre#}
-        {#    });#}
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            let parameters = $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
+            $.ajax({
+                //url: '{% url 'erp:category_create' %}',
+                url: window.location.pathname,
+                type: 'POST',
+                data: parameters, //le mando los parametros del formulario
+                dataType: 'json',
+            }).done(function (data) {//si tod0 sale bien
+                if (!data.hasOwnProperty('error')) {//si no detecta error
+                    location.href = '{{ list_url }}';
+                    return false; //para salir del proceso
+                }
+                //else
+
+                message_error(data.error);
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown)
+            }).always(function () {
+                //console.log('complete') //se imprime siempre
+            });
         })
 
-
+        submitWithajax();
     </script>
 
 {% endblock %}
