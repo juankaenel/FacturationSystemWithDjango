@@ -17,7 +17,7 @@ function message_error(obj) {
 
 }
 
-function submitWithajax(url,parameters) {
+function submitWithajax(url,parameters,callback) {
     $.confirm({
         theme: 'material',
         title: 'Confirmación',
@@ -41,7 +41,7 @@ function submitWithajax(url,parameters) {
                 dataType: 'json',
             }).done(function (data) {//si tod0 sale bien
                 if (!data.hasOwnProperty('error')) {//si no detecta error
-                    location.href = '{{ list_url }}';
+                    callback();
                     return false; //para salir del proceso
                 }
                 //else
