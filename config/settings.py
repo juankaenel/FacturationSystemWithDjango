@@ -136,3 +136,9 @@ STATICFILES_FINDERS =[
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/erp/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
+
+#Carpeta raíz de los archivos
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+#URL absoluta
+MEDIA_URL = '/media/'
+#Estas dos configuraciones también debo definirlas en urls de la aplicación cuando trabajamos en modo debug

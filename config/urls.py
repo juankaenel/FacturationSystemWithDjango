@@ -17,13 +17,19 @@ from django.contrib import admin
 from django.urls import path, include
 from core.homepage.views import IndexView
 from core.login.views import LoginFormView
-#from core.login.views import LoginFormView2
+# from core.login.views import LoginFormView2
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', IndexView.as_view(),name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('login/', include('core.login.loginurls')),
-    #path('login2/', LoginFormView2.as_view()),
+    # path('login2/', LoginFormView2.as_view()),
     path('admin/', admin.site.urls),
     path('erp/', include('core.erp.urls')),
-
 ]
+
+#ESTA CONFIGURACIÓN ES PARA TRABAJAR CON ARCHIVOS ESTATICOS Y MEDIA
+urlpatterns += static(settings.MEDIA_URL,
+                      document_root=settings.MEDIA_ROOT)

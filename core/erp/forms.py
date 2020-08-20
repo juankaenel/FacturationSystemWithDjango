@@ -1,6 +1,6 @@
 from django.forms import *
 
-from core.erp.models import Category
+from core.erp.models import Category, Product
 
 
 class CategoryForm(ModelForm):
@@ -66,3 +66,35 @@ class CategoryForm(ModelForm):
             # {%endfor%}
         #print(cleaned)
         return cleaned
+
+class ProductForm(ModelForm):
+    """
+    Formulario de Producto
+    """
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['name'].widget.attrs['autofocus']= True #poneme el foco en el name
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        widgets = {  # con esto personalizo el tipo de entrada de dato de formulario, si es textarea, textinput
+            'name': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese un nombre...',
+                }
+            ),
+        }
+
+    #redefino el metodo save
+   #def save(self, commit=True):
+   #    data = {}
+   #    form = super()
+   #    try:
+   #        if form.is_valid():
+   #            form.save()
+   #        else:
+   #            data['error']=form.errors
+   #    except Exception as e:
+   #        print(e)
+   #    return data
