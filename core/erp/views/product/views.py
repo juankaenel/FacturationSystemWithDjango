@@ -12,13 +12,14 @@ class ProductListView(ListView):
     model = Product
     template_name = 'product/list.html'
 
-    @method_decorator(login_required) #debo definir el login_url en settings para la redireccion en caso q no esté logueado
+    @method_decorator(
+        login_required)  # debo definir el login_url en settings para la redireccion en caso q no esté logueado
     @method_decorator(csrf_exempt)  # decorador para deshabilitar el crsf
     # reescribimos el metodo dispatch
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-# sobreescribo el data a enviar debido a que se enviaba vacío
+    # sobreescribo el data a enviar debido a que se enviaba vacío
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de productos'
@@ -26,6 +27,7 @@ class ProductListView(ListView):
         context['create_url'] = reverse_lazy('erp:product_create')
         context['list_url'] = reverse_lazy('erp:product_list')
         return context
+
 
 class ProductCreateView(CreateView):
     model = Product
@@ -38,19 +40,22 @@ class ProductCreateView(CreateView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-   #def post(self, request, *args, **kwargs):
-   #    data = {}
-   #    try:
 
-   #        action = request.POST['action']
-   #        if action == 'add':
-   #            form = self.get_form()
-   #            data = form.save()
-   #        else:
-   #            data['error'] = 'No ha especificado ninguna acción'
-   #    except Exception as e:
-   #        data['error'] = str(e)
-   #    return JsonResponse(data)
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            #print(request.POST)
+            #print(request.FILES)
+                action = request.POST['action']
+                if action == 'add':
+                    form = self.get_form()
+                    data = form.save()
+                else:
+                    data['error'] = 'No ha especificado ninguna acción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,6 +64,7 @@ class ProductCreateView(CreateView):
         context['list_url'] = reverse_lazy('erp:product_list')
         context['action'] = 'add'  # action la usamos para verificar el tipo de acción se quiere realizar
         return context
+
 
 class ProductUpdateView(UpdateView):
     model = Product
@@ -91,6 +97,7 @@ class ProductUpdateView(UpdateView):
         context['list_url'] = reverse_lazy('erp:product_list')
         context['action'] = 'edit'  # action la usamos para verificar el tipo de acción se quiere realizar
         return context
+
 
 class ProductDeleteView(DeleteView):
     model = Product

@@ -37,10 +37,10 @@ class Product(models.Model):
     """
     Product Model
     """
-    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    cate = models.ForeignKey(Category, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True)
-    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    name = models.CharField(max_length=150, verbose_name='Nombre', unique=True) #el verbose name es como se verá en el formulario
+    cate = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
+    image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True,verbose_name='Imágen')
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de venta')
 
     def __str__(self):
         return self.name

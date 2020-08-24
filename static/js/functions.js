@@ -17,10 +17,10 @@ function message_error(obj) {
 
 }
 
-function submitWithajax(url,title,content,parameters,callback) {
+function submitWithajax(url, title, content, parameters, callback) {
     $.confirm({
         theme: 'material',
-        title: 'title',
+        title: title,
         icon: 'fa fa-info',
         content: content,
         columnClass: 'medium',
@@ -34,25 +34,27 @@ function submitWithajax(url,title,content,parameters,callback) {
                 btnClass: 'btn-primary',
                 action: function () {
                     $.ajax({
-                //url: '{% url 'erp:category_create' %}',
-                url: url,//,window.location.pathname,
-                type: 'POST',
-                data: parameters, //le mando los parametros del formulario
-                dataType: 'json',
-            }).done(function (data) {//si tod0 sale bien
-                if (!data.hasOwnProperty('error')) {//si no detecta error
-                    callback();
-                    return false; //para salir del proceso
-                }
-                //else
+                        //url: '{% url 'erp:category_create' %}',
+                        url: url,//,window.location.pathname,
+                        type: 'POST',
+                        data: parameters, //le mando los parametros del formulario
+                        dataType: 'json',
+                        processData: false, //no procese la data ni el tipo de dato, yo te lo mando por la vista
+                        contentType: false,
+                    }).done(function (data) {//si tod0 sale bien
+                        if (!data.hasOwnProperty('error')) {//si no detecta error
+                            callback();
+                            return false; //para salir del proceso
+                        }
+                        //else
 
-                message_error(data.error);
+                        message_error(data.error);
 
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown)
-            }).always(function () {
-                //console.log('complete') //se imprime siempre
-            });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown)
+                    }).always(function () {
+                        //console.log('complete') //se imprime siempre
+                    });
                 }
             },
             danger: {
