@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     #apps
     'core.erp',
     'core.homepage',
-    'core.login'
+    'core.login',
+    'core.user'
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 #URL absoluta
 MEDIA_URL = '/media/'
 #Estas dos configuraciones también debo definirlas en urls de la aplicación cuando trabajamos en modo debug
+
+AUTH_USER_MODEL = 'user.User' #app user. clase -> con esto defino que vamos a sobreescribir el modelo usuario por defecto de django
