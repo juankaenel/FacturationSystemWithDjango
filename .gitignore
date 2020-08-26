@@ -4,8 +4,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+config/secret_settings.py
 media
+
+
 
 .idea
 # C extensions
