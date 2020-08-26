@@ -41,6 +41,8 @@ class CategoryForm(ModelForm):
 
         }
 
+        exclude = ['user_updated','user_creation'] #esto es para excluir que salgan estos campos en mi formulario
+
     # redefino el metodo save
     def save(self, commit=True):
         data = {}
@@ -87,6 +89,7 @@ class ProductForm(ModelForm):
                 }
             ),
         }
+
 
     # redefino el metodo save
     def save(self, commit=True):
