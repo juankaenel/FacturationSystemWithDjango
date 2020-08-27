@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from django.forms import *
 
-from core.erp.models import Category, Product
+from core.erp.models import Category, Product, Client
 
 
 class CategoryForm(ModelForm):
@@ -89,6 +91,63 @@ class ProductForm(ModelForm):
                 }
             ),
         }
+
+
+    # redefino el metodo save
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            print(e)
+        return data
+
+
+class ClientForm(ModelForm):
+    """
+    Formulario de Cliente
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['names'].widget.attrs['autofocus'] = True  # poneme el foco en el name
+
+    class Meta:
+        model = Client
+        fields = '__all__'
+        widgets = {  # con esto personalizo el tipo de entrada de dato de formulario, si es textarea, textinput
+            'names': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese sus nombres...',
+                }
+            ),
+            'surnames': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese sus apellidos...',
+                }
+            ),
+            'dni': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su DNI...',
+                }
+            ),
+            'date_brithday': DateInput(format='%Y-%m-%d',
+                attrs={
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                }
+            ),
+            'address': TextInput(
+                attrs={
+                    'placeholder':'Ingrese su dirección',
+                }
+            ),
+            'gender': Select()
+        },
+        exclude = ['user_updated','user_creation']
 
 
     # redefino el metodo save

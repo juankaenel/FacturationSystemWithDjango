@@ -8,6 +8,7 @@ from datetime import datetime
 from django.forms import model_to_dict
 
 from config.settings import MEDIA_URL, STATIC_URL
+from core.erp.choices import gender_choices
 from core.models import BaseModel
 
 
@@ -76,15 +77,21 @@ class Client(models.Model):
     """
     Client Model
     """
-    names = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
-    last_names = models.CharField(max_length=150)
-    dni = models.IntegerField()
-    birth_date = models.DateTimeField()
-    direction = models.CharField(max_length=50)
-    sex = models.CharField(max_length=12)
+    names = models.CharField(max_length=150, verbose_name='Nombres')
+    surnames = models.CharField(max_length=150,verbose_name='Apellidos')
+    dni = models.IntegerField(unique=True, verbose_name='DNI')
+    date_birthday = models.DateTimeField(default=datetime.now,verbose_name='Fecha de nacimiento')
+    address = models.CharField(max_length=100, null=True, blank=True, verbose_name='Dirección')
+    gender = models.CharField(max_length=12,choices=gender_choices,default='male',verbose_name='Sexo')
 
     def __str__(self):
         return self.names
+
+    def toJson(self):  # convierte a json los datos
+        item = model_to_dict(self) #paso el modelo a diccionario
+        item['gender'] = self.get_gender_display()
+        item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
+        return item
 
     class Meta:
         verbose_name = 'Cliente'
