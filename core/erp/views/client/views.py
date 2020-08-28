@@ -23,13 +23,12 @@ class ClientView(TemplateView):
             if action == 'datasearch':
                 data = []
                 for i in Client.objects.all():
-                    data.append(
-                        i.toJson())  # AGREGO a la lista data todos los objetos de la categoria en forma de diccionario
+                    data.append(i.toJson())  # AGREGO a la lista data todos los objetos de la categoria en forma de diccionario
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
             data['error'] = str(e)
-        return JsonResponse(data,safe=True)
+        return JsonResponse(data,safe=False)
 
 
     # sobreescribo el data a enviar debido a que se enviaba vacío
