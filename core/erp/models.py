@@ -80,7 +80,7 @@ class Client(models.Model):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150,verbose_name='Apellidos')
     dni = models.IntegerField(unique=True, verbose_name='DNI')
-    date_birthday = models.DateTimeField(default=datetime.now,verbose_name='Fecha de nacimiento')
+    date_birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
     address = models.CharField(max_length=100, null=True, blank=True, verbose_name='Dirección')
     gender = models.CharField(max_length=12,choices=gender_choices,default='male',verbose_name='Sexo')
 

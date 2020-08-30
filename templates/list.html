@@ -38,12 +38,15 @@
             </table>
         </div>
         <div class="card-footer">
-            <a href="{{ create_url }}" class="btn btn-primary btn-flat " id="btnTest"> <!--create_url la defini en la views de product en ListView-->
-                <i class="fas fa-plus"></i> Nuevo registro
-            </a>
-            <a href="{{ list_url }}" class="btn btn-success btn-flat">
-                <i class="fas fa-sync"></i> Actualizar
-            </a>
+            {% block buttons_list %} <!--esto sirve para que las páginas puedan usar los botones a su gusto y hereden lo q necesiten-->
+                <a href="{{ create_url }}" class="btn btn-primary btn-flat " id="btnTest">
+                    <!--create_url la defini en la views de product en ListView-->
+                    <i class="fas fa-plus"></i> Nuevo registro
+                </a>
+                <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                    <i class="fas fa-sync"></i> Actualizar
+                </a>
+            {% endblock %}
         </div>
     </div>
 {% endblock %}
@@ -61,12 +64,12 @@
                 $.ajax({
                     url: '{% url 'erp:category_list' %}',
                     type: 'POST',
-                    data: {id:1},
+                    data: {id: 1},
                     dataType: 'json',
                 }).done(function (data) {
                     //console.log(data) //si tod0 sale bien
-                }).fail(function (jqXHR,textStatus,errorThrown) {
-                     alert(textStatus + ': ' +errorThrown)
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ': ' + errorThrown)
                 }).always(function () {
                     //console.log('complete') //se imprime siempre
                 });

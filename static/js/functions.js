@@ -52,7 +52,7 @@ function submitWithajax(url, title, content, parameters, callback) {
 
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         alert(textStatus + ': ' + errorThrown)
-                    }).always(function () {
+                    }).always(function (data) {
                         //console.log('complete') //se imprime siempre
                     });
                 }

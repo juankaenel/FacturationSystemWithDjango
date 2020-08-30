@@ -21,16 +21,27 @@ class ClientView(TemplateView):
         data = {}
         try:
             action = request.POST['action']
+            #print(request.POST)
             if action == 'datasearch':
                 data = []
                 for i in Client.objects.all():
-                    data.append(i.toJson())  # AGREGO a la lista data todos los objetos de la categoria en forma de diccionario
+                    data.append(i.toJSON())
+                    print('guardado')
+            elif action == 'add':
+                cli = Client()
+                cli.names = request.POST['names']
+                cli.surnames = request.POST['surnames']
+                cli.dni = request.POST['dni']
+                cli.date_birthday = request.POST['date_birthday']
+                cli.address = request.POST['address']
+                cli.gender = request.POST['gender']
+                cli.save()
+
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
             data['error'] = str(e)
-        return JsonResponse(data,safe=False)
-
+        return JsonResponse(data, safe=False)
 
     # sobreescribo el data a enviar debido a que se enviaba vacío
     def get_context_data(self, **kwargs):

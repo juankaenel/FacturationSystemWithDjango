@@ -103,7 +103,7 @@ class ProductForm(ModelForm):
             else:
                 data['error'] = form.errors
         except Exception as e:
-            print(e)
+            data['error'] = str(e)
         return data
 
 
@@ -160,5 +160,5 @@ class ClientForm(ModelForm):
             else:
                 data['error'] = form.errors
         except Exception as e:
-            print(e)
+            data['error'] = str(e)
         return data
