@@ -37,4 +37,15 @@ $(function () {
 
         }
     });
+    $('#myModalClient').modal('show'); //me permite visualizar el modal
+
+     $('form').on('submit', function (e) {
+            e.preventDefault();
+            //let parameters = $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
+            let parameters = new FormData(this); //con esto hago una instancia de FormData y le mando el formulario actual a través de this, eso viaja al parameters q se le pasa al ajax
+
+            submitWithajax(window.location.pathname,'Notificación','¿Estás seguro que desea realizar la siguiente acción?', parameters, function () {
+                location.href = '{{ list_url }}';
+            });
+        });
 });
