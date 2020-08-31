@@ -12,8 +12,8 @@ from core.erp.models import Client
 class ClientView(TemplateView):
     template_name = 'client/list.html'
 
-    @method_decorator(login_required)
     @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -21,12 +21,10 @@ class ClientView(TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            #print(request.POST)
             if action == 'datasearch':
                 data = []
                 for i in Client.objects.all():
-                    data.append(i.toJSON())
-                    print('guardado')
+                    data.append(i.toJson())
             elif action == 'add':
                 cli = Client()
                 cli.names = request.POST['names']
@@ -36,18 +34,16 @@ class ClientView(TemplateView):
                 cli.address = request.POST['address']
                 cli.gender = request.POST['gender']
                 cli.save()
-
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
 
-    # sobreescribo el data a enviar debido a que se enviaba vacío
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de clientes'
-        context['entity'] = 'Clientes'  # esto viaja al body para que tome ese nombre el href
+        context['title'] = 'Listado de Clientes'
         context['list_url'] = reverse_lazy('erp:client')
+        context['entity'] = 'Clientes'
         context['form'] = ClientForm()
         return context

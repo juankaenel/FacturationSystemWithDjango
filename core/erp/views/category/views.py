@@ -53,7 +53,6 @@ class CategoryListView(ListView):
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
            data['error'] = str(e)
-
         return JsonResponse(data, safe=False) #en este caso para serializar objeto que no están en formato diccionario hay que poner safe = False
 
 

@@ -1,8 +1,8 @@
-let tableClient;
+var tblClient;
 
 function getData() {
     //Función para cargar el datatable
-    tableClient = $('#data').DataTable({
+    tblClient = $('#data').DataTable({
         responsive: true,
         autoWidth: false,
         destroy: true,
@@ -62,6 +62,7 @@ $(function () {
 
         submitWithajax(window.location.pathname, 'Notificación', '¿Estás seguro que desea realizar la siguiente acción?', parameters, function () {
             //Una vez que se ejecute todoo el submit
+            console.log('enviado');
             tblClient.ajax.reload();//refresco el datatable
             //getData();
             $('#myModalClient').modal('hide'); //oculto el modal
