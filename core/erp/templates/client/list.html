@@ -47,7 +47,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
+                            <!--componentes para controlar el tipo de acción y la clave primaria de dicho cliente en el view-->
                             <input name="action" type="hidden" value="add">
+                            <input name="id" type="hidden" value="0" id="id"> <!--para controlar el id del cliente-->
+                            <!--fin de componentes-->
                             {% for field in form.visible_fields %}
                                 <div class="form-group">
                                     <label for="email">{{ field.label }}:</label>

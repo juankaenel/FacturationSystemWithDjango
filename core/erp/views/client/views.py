@@ -21,12 +21,24 @@ class ClientView(TemplateView):
         data = {}
         try:
             action = request.POST['action']
+            #acción para listar en los atributos del cliente datatable
             if action == 'datasearch':
                 data = []
                 for i in Client.objects.all():
                     data.append(i.toJson())
+            #acción agregar
             elif action == 'add':
                 cli = Client()
+                cli.names = request.POST['names']
+                cli.surnames = request.POST['surnames']
+                cli.dni = request.POST['dni']
+                cli.date_birthday = request.POST['date_birthday']
+                cli.address = request.POST['address']
+                cli.gender = request.POST['gender']
+                cli.save()
+            #acción editar
+            elif action == 'edit':
+                cli = Client.objects.get(pk=request.POST['id'])
                 cli.names = request.POST['names']
                 cli.surnames = request.POST['surnames']
                 cli.dni = request.POST['dni']

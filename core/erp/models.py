@@ -89,7 +89,7 @@ class Client(models.Model):
 
     def toJson(self):  # convierte a json los datos
         item = model_to_dict(self) #paso el modelo a diccionario
-        item['gender'] = self.get_gender_display()
+        item['gender'] = {'id':self.gender, 'name': self.get_gender_display()}
         item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         return item
 
