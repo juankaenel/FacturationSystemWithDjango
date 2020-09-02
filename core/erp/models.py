@@ -81,8 +81,8 @@ class Client(models.Model):
     surnames = models.CharField(max_length=150,verbose_name='Apellidos')
     dni = models.IntegerField(unique=True, verbose_name='DNI')
     date_birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
-    address = models.CharField(max_length=100, null=True, blank=True, verbose_name='Dirección')
-    gender = models.CharField(max_length=12,choices=gender_choices,default='male',verbose_name='Sexo')
+    address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
+    gender = models.CharField(max_length=14,choices=gender_choices,default='male',verbose_name='Sexo')
 
     def __str__(self):
         return self.names
@@ -90,6 +90,7 @@ class Client(models.Model):
     def toJson(self):  # convierte a json los datos
         item = model_to_dict(self) #paso el modelo a diccionario
         item['gender'] = {'id':self.gender, 'name': self.get_gender_display()}
+        #item['date_birthday'] = self.date_birthday.strftime('%d/%m/%Y')
         item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         return item
 

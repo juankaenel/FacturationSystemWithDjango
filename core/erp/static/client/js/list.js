@@ -30,8 +30,8 @@ function getData() {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    var buttons = '<a href="#" class="btn btn-warning btn-xs btn-flat btnEdit"><i class="fas fa-edit"></i></a> ';
-                    buttons += '<a href="#" type="button" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>';
+                    var buttons = '<a href="#" class="btn btn-warning btn-xs btn-flat btnEdit"><i class="fas fa-edit"></i></a> '; //btn editar
+                    buttons += '<a href="#" type="button" class="btn btn-danger btn-xs btn-flat btnDelete"><i class="fas fa-trash-alt"></i></a>'; //btn borrar
                     return buttons;
                 }
             },
@@ -57,32 +57,50 @@ $(function () {
     })
 
 
-    //ACCION EDITAR
     //llamo a la tabla data, tbody. cuando haga click en el boton de clase btnEdit...
-    $('#data tbody').on('click','.btnEdit',function () {
-        modal_title.find('span').html('Edición de un cliente');
-        modal_title.find('i').removeClass().addClass('fas fa-edit');
 
-        //var data = tblClient.row( $(this).parents('tr') ).data() ; //trae los valores del componente de la tabla cuando pongo editar. Esto solo no nos serviría pq cuando pasa a diseño resposnivo cambia los parents
-        //con diseño responsivo incluido
-        var tr = tblClient.cell($(this).closest('td','li')).index();
-        var data = tblClient.row( tr.row ).data();
+    $('#data tbody')
+        //ACCION EDITAR
+        .on('click', '.btnEdit', function () {
+            modal_title.find('span').html('Edición de un cliente');
+            modal_title.find('i').removeClass().addClass('fas fa-edit');
 
-        //ahora paso los datos obtenidos de mi tabla a mis inputs. T-odo esto sucede cuando damos click en editar
-        $('input[name="action"]').val('edit'); //cambio el tipo de acción para que se controle en el view de client
-        $('input[name="id"]').val(data.id); //para esto tengo que mandarle desde el list.html de client un campo de tipo id hidden
-        $('input[name="names"]').val(data.names);
-        $('input[name="surnames"]').val(data.surnames);
-        $('input[name="dni"]').val(data.dni);
-        $('input[name="date_birthday"]').val(data.date_birthday);
-        $('input[name="address"]').val(data.address);
-        $('input[name="gender"]').val(data.gender.id); //retorno el id que hace referencia a ese género. Recordar q en el método ToJson retorna un diccionario
-        //abrimos el modal
-        $('#myModalClient').modal('show');
-    });
+            //var data = tblClient.row( $(this).parents('tr') ).data() ; //trae los valores del componente de la tabla cuando pongo editar. Esto solo no nos serviría pq cuando pasa a diseño resposnivo cambia los parents
+            //con diseño responsivo incluido
+            var tr = tblClient.cell($(this).closest('td', 'li')).index();
+            var data = tblClient.row(tr.row).data();
 
-    $('form').on('submit', function (e) { //cuando le de click al botón de type submit
-        //let parameters = $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
+            //ahora paso los datos obtenidos de mi tabla a mis inputs. T-odo esto sucede cuando damos click en editar
+            $('input[name="action"]').val('edit'); //cambio el tipo de acción para que se controle en el view de client
+            $('input[name="id"]').val(data.id); //para esto tengo que mandarle desde el list.html de client un campo de tipo id hidden
+            $('input[name="names"]').val(data.names);
+            $('input[name="surnames"]').val(data.surnames);
+            $('input[name="dni"]').val(data.dni);
+            $('input[name="date_birthday"]').val(data.date_birthday);
+            $('input[name="address"]').val(data.address);
+            $('input[name="gender"]').val(data.gender.id); //retorno el id que hace referencia a ese género. Recordar q en el método ToJson retorna un diccionario
+            //abrimos el modal
+            $('#myModalClient').modal('show');
+        })
+        //ACCION BORRAR
+        .on('click', '.btnDelete', function () {
+            //var data = tblClient.row( $(this).parents('tr') ).data() ; //trae los valores del componente de la tabla cuando pongo editar. Esto solo no nos serviría pq cuando pasa a diseño resposnivo cambia los parents
+            //con diseño responsivo incluido
+            var tr = tblClient.cell($(this).closest('td', 'li')).index();
+            var data = tblClient.row(tr.row).data();
+            let parameters = new FormData();
+            parameters.append('action','delete')
+            parameters.append('id',data.id)
+            submitWithajax(window.location.pathname, 'Notificación', '¿Estás seguro que desea eliminar el siguiente registro?', parameters, function () {
+                tblClient.ajax.reload();//refresco el datatable
+
+            });
+            //$('#myModalClient').modal('show');
+        })
+
+    //cuando le de click al botón de type submit
+    //let parameters = $(this).serializeArray(); //esto me permite obtener en un array todos los datos que hay en nuestro formulario. Con this hago referencia al formulario
+    $('form').on('submit', function (e) {
         let parameters = new FormData(this); //con esto hago una instancia de FormData y le mando el formulario actual a través de this, eso viaja al parameters q se le pasa al ajax
         e.preventDefault();
 
