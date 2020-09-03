@@ -140,11 +140,6 @@ class ClientForm(ModelForm):
                     'value': datetime.now().strftime('%Y-%m-%d'),
                 }
             ),
-            # 'date_brithday': DateInput(format='%d/%m/%Y',
-            #       attrs={
-            #           'value': datetime.now().strftime('%d/%m/%Y'),
-            #           }
-            # ),
             'address': TextInput(
                 attrs={
                     'placeholder':'Ingrese su dirección',

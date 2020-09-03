@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -6,15 +7,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from core.erp.forms import ClientForm
+from core.erp.mixins import IsSuperUserMixin
 from core.erp.models import Client
 
 
-class ClientView(TemplateView):
+class ClientView(LoginRequiredMixin,IsSuperUserMixin,TemplateView):
     template_name = 'client/list.html'
 
     @method_decorator(csrf_exempt)
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
+    #@method_decorator(login_required) -> voy a usar el mixin para que controle el login
+    def dispatch(self, request, *args, **kwargs): #al heredar el IsSuperMixin no tengo que controlar si es superusuario o no aquí en el dispatch sino que lo heredamos ya desde el mixins..
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
