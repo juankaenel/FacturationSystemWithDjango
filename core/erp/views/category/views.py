@@ -1,5 +1,6 @@
 # Django
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -8,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView  # Vistas genéricas
 # erp
 from core.erp.forms import CategoryForm
+from core.erp.mixins import IsSuperUserMixin, ValidatePermissionRequiredMixin
 from core.erp.models import Category
 
 
@@ -20,9 +22,15 @@ from core.erp.models import Category
 #     return render(request,'category/list.html',data)
 
 # Vista basada en clase
-class CategoryListView(ListView):
+
+class CategoryListView(LoginRequiredMixin,ValidatePermissionRequiredMixin,ListView):
     model = Category
     template_name = 'category/list.html'
+    #permission_required = ('erp.change_category','erp.delete_category') # estos permisos lo definí desde el panel de administración, en la parte usuarios. Si no tiene habilitado este permiso y no es un super usuario le tirará error Forbbiden. También se crea una tabla nueva en la bd llamada user_permissions que es donde se guardan las relaciones de los permisos
+    #puedo hacer uso de PermissionRequiredMixin -> que ya está definido en django pero en este caso creamos una nueva desde el mixins.py llamada validatepermissionrequiredmixin
+    permission_required = ('erp.change_category','erp.delete_category') #estos dos permisos si los tengo
+    #permission_required = ('erp.view_category','erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
+
 
     @method_decorator(login_required) #debo definir el login_url en settings para la redireccion en caso q no esté logueado
     @method_decorator(csrf_exempt)  # decorador para deshabilitar el crsf
