@@ -26,10 +26,13 @@ from core.erp.models import Category
 class CategoryListView(LoginRequiredMixin,ValidatePermissionRequiredMixin,ListView):
     model = Category
     template_name = 'category/list.html'
+    #permisos requeridos son los que te obligan a tener ese permiso para poder ingresar a la vista, si un usr no lo tiene no lo dejará entrar
     #permission_required = ('erp.change_category','erp.delete_category') # estos permisos lo definí desde el panel de administración, en la parte usuarios. Si no tiene habilitado este permiso y no es un super usuario le tirará error Forbbiden. También se crea una tabla nueva en la bd llamada user_permissions que es donde se guardan las relaciones de los permisos
     #puedo hacer uso de PermissionRequiredMixin -> que ya está definido en django pero en este caso creamos una nueva desde el mixins.py llamada validatepermissionrequiredmixin
     #permission_required = ('erp.change_category','erp.delete_category') #estos dos permisos si los tengo
-    permission_required = ('erp.view_category','erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
+    #permission_required = ('erp.view_category','erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
+    permission_required = ('erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
+
 
 
     @method_decorator(login_required) #debo definir el login_url en settings para la redireccion en caso q no esté logueado
@@ -73,12 +76,17 @@ class CategoryListView(LoginRequiredMixin,ValidatePermissionRequiredMixin,ListVi
         context['list_url'] = reverse_lazy('erp:category_list')
         return context
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(ValidatePermissionRequiredMixin,CreateView):
+    #control de acceso
+    permission_required = 'erp.view_category'
+    url_redirect = reverse_lazy('erp:category_list')
+    #fin del control
     model = Category
     form_class = CategoryForm  # le paso el formulario basado en clases
     template_name = 'category/create.html'  # le paso el template
     success_url = reverse_lazy(
         'erp:category_list')  # una vez que se ejecute dicho formulario redireccioname a category list
+
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
