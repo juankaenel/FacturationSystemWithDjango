@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
@@ -46,4 +46,6 @@ class ValidatePermissionRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         if request.user.has_perms(self.get_perms()): #con esto controlamos el tipo de permiso
             return super().dispatch(request, *args, **kwargs)
+        #else
+        messages.error(request,'No tiene permiso para ingresar') # itero los errores en el body.html
         return redirect(self.get_url_redirect())
