@@ -41,17 +41,15 @@
     <script>
         {#Itero los errores controlados del mixins.py#}
         {% if messages %}
-             var html='<span>';
-            {% for message in messages %} //recorro los errores del mixin
-                html += '{{ message }}<br>';
+            let errors = '';
+            {% for message in messages %} //recorro los errores del mixin.py
+                errors += '{{ message }}\n';
             {% endfor %}
-            html='</span>';
             //sweat alert
             Swal.fire({
-                title:'Error!',
-                html:html,
-                //text:'No tiene acceso a esta vista',
-                icon:'error',
+                title: 'Error!',
+                text: errors,
+                icon: 'error',
             });
         {% endif %}
     </script>

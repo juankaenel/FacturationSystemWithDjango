@@ -30,8 +30,8 @@ class CategoryListView(LoginRequiredMixin,ValidatePermissionRequiredMixin,ListVi
     #permission_required = ('erp.change_category','erp.delete_category') # estos permisos lo definí desde el panel de administración, en la parte usuarios. Si no tiene habilitado este permiso y no es un super usuario le tirará error Forbbiden. También se crea una tabla nueva en la bd llamada user_permissions que es donde se guardan las relaciones de los permisos
     #puedo hacer uso de PermissionRequiredMixin -> que ya está definido en django pero en este caso creamos una nueva desde el mixins.py llamada validatepermissionrequiredmixin
     #permission_required = ('erp.change_category','erp.delete_category') #estos dos permisos si los tengo
-    #permission_required = ('erp.view_category','erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
-    permission_required = ('erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
+    permission_required = ('erp.view_category','erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
+    #permission_required = ('erp.delete_category') #el view no lo tengo por lo tanto me redirijirá al dashboard
 
 
 
