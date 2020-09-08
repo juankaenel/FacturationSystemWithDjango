@@ -70,7 +70,7 @@ class CategoryListView(LoginRequiredMixin,ValidatePermissionRequiredMixin,ListVi
 # sobreescribo el data a enviar debido a que se enviaba vacío
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de categorías'
+        context['title'] = 'Listado de Categorías'
         context['entity'] = 'Categorías'  # esto viaja al body para que tome ese nombre el href
         context['create_url'] = reverse_lazy('erp:category_create')
         context['list_url'] = reverse_lazy('erp:category_list')

@@ -74,12 +74,11 @@ class CategoryForm(ModelForm):
 
 class ProductForm(ModelForm):
     """
-    Formulario de Producto
+       Formulario de Producto
     """
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['autofocus'] = True  # poneme el foco en el name
+        self.fields['name'].widget.attrs['autofocus'] = True # poneme el foco en el name
 
     class Meta:
         model = Product
@@ -87,13 +86,17 @@ class ProductForm(ModelForm):
         widgets = {  # con esto personalizo el tipo de entrada de dato de formulario, si es textarea, textinput
             'name': TextInput(
                 attrs={
-                    'placeholder': 'Ingrese un nombre...',
+                    'placeholder': 'Ingrese un nombre',
+                }
+            ),
+            'cat': Select(
+                attrs={
+                    'class': 'select2', #utilizo la libreria select2
+                    'style': 'width: 100%'
                 }
             ),
         }
 
-
-    # redefino el metodo save
     def save(self, commit=True):
         data = {}
         form = super()
@@ -162,3 +165,25 @@ class ClientForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+
+
+class TestForm(Form):
+    categories = ModelChoiceField(queryset=Category.objects.all(), widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%'
+    }))
+
+    products = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%'
+    }))
+
+    # search = CharField(widget=TextInput(attrs={
+    #     'class': 'form-control',
+    #     'placeholder': 'Ingrese una descripción'
+    # }))
+
+    search = ModelChoiceField(queryset=Product.objects.none(), widget=Select(attrs={
+        'class': 'form-control select2',
+        'style': 'width: 100%'
+    }))

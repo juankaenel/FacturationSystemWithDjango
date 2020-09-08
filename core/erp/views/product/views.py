@@ -22,7 +22,7 @@ class ProductListView(ListView):
     # sobreescribo el data a enviar debido a que se enviaba vacío
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de productos'
+        context['title'] = 'Listado de Productos'
         context['entity'] = 'Productos'  # esto viaja al body para que tome ese nombre el href
         context['create_url'] = reverse_lazy('erp:product_create')
         context['list_url'] = reverse_lazy('erp:product_list')
@@ -92,7 +92,7 @@ class ProductUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edición de un producto'
+        context['title'] = 'Edición de un Producto'
         context['entity'] = 'Productos'
         context['list_url'] = reverse_lazy('erp:product_list')
         context['action'] = 'edit'  # action la usamos para verificar el tipo de acción se quiere realizar
