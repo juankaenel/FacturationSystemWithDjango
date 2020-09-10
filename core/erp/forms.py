@@ -195,10 +195,12 @@ class SaleForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['client'].widget.attrs['autofocus'] = True  # poneme el foco en el name
         for form in self.visible_fields():                     #con esto voy a evitar estar definiendo el tipo de clase del fomulario para cada dato del modelo, esta es una forma, la otra forma es con una libreria llamada widget_tweaks que solo se trabaja desde el front
            form.field.widget.attrs['class'] = 'form-control'                #como voy a hacer uso de la libreria 'widget_tweaks' solo comento las lineas
            form.field.widget.attrs['autocomplete'] = 'off'
+        self.fields['client'].widget.attrs['autofocus'] = True  # poneme el foco en el name
+        self.fields['client'].widget.attrs['class'] =  'form-control select2'
+        self.fields['client'].widget.attrs['style'] =  'width: 100%'
 
     class Meta:
         model = Sale
@@ -208,8 +210,9 @@ class SaleForm(ModelForm):
                     'class': 'form-control',
                     'style': 'width:100%',
                 }),
-            'date:joined': DateInput(format='%Y-%m-%d',
+            'sale_date': DateInput(format='%Y-%m-%d',
                 attrs={
+                    'class': 'form-control',
                     'value': datetime.now().strftime('%Y-%m-%d'), #valor por defecto
                 }
                 ),
