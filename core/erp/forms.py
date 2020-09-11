@@ -198,9 +198,21 @@ class SaleForm(ModelForm):
         for form in self.visible_fields():                     #con esto voy a evitar estar definiendo el tipo de clase del fomulario para cada dato del modelo, esta es una forma, la otra forma es con una libreria llamada widget_tweaks que solo se trabaja desde el front
            form.field.widget.attrs['class'] = 'form-control'                #como voy a hacer uso de la libreria 'widget_tweaks' solo comento las lineas
            form.field.widget.attrs['autocomplete'] = 'off'
+
+        #forma 1
         self.fields['client'].widget.attrs['autofocus'] = True  # poneme el foco en el name
         self.fields['client'].widget.attrs['class'] =  'form-control select2'
         self.fields['client'].widget.attrs['style'] =  'width: 100%'
+
+        #forma 2 -> trabajamos con el plugin de tempus dominus
+        self.fields['sale_date'].widget.attrs={
+            'autocomplete': 'off',
+            'class':'form-control datetimepicker-input', #hago referencia al campo de la libreria tempus dominus de bootstrap para poder manejar mejor la fecha
+            'id':'sale_date', #si no le pongo id el por defecto será id_sale_date
+            'data-target': '#sale_date',
+            'data_toogle':'datetimepicker',
+
+        }
 
     class Meta:
         model = Sale
