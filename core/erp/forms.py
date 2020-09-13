@@ -43,7 +43,7 @@ class CategoryForm(ModelForm):
 
         }
 
-        exclude = ['user_updated','user_creation'] #esto es para excluir que salgan estos campos en mi formulario
+        exclude = ['user_updated', 'user_creation']  # esto es para excluir que salgan estos campos en mi formulario
 
     # redefino el metodo save
     def save(self, commit=True):
@@ -76,9 +76,10 @@ class ProductForm(ModelForm):
     """
        Formulario de Producto
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['autofocus'] = True # poneme el foco en el name
+        self.fields['name'].widget.attrs['autofocus'] = True  # poneme el foco en el name
 
     class Meta:
         model = Product
@@ -91,7 +92,7 @@ class ProductForm(ModelForm):
             ),
             'cat': Select(
                 attrs={
-                    'class': 'select2', #utilizo la libreria select2
+                    'class': 'select2',  # utilizo la libreria select2
                     'style': 'width: 100%'
                 }
             ),
@@ -123,35 +124,34 @@ class ClientForm(ModelForm):
         model = Client
         fields = '__all__'
         widgets = {  # con esto personalizo el tipo de entrada de dato de formulario, si es textarea, textinput
-            'names': TextInput(
-                attrs={
-                    'placeholder': 'Ingrese sus nombres...',
-                }
-            ),
-            'surnames': TextInput(
-                attrs={
-                    'placeholder': 'Ingrese sus apellidos...',
-                }
-            ),
-            'dni': TextInput(
-                attrs={
-                    'placeholder': 'Ingrese su DNI...',
-                }
-            ),
-            'date_brithday': DateInput(format='%Y-%m-%d',
-                attrs={
-                    'value': datetime.now().strftime('%Y-%m-%d'),
-                }
-            ),
-            'address': TextInput(
-                attrs={
-                    'placeholder':'Ingrese su dirección',
-                }
-            ),
-            'gender': Select()
-        },
-        exclude = ['user_updated','user_creation']
-
+                      'names': TextInput(
+                          attrs={
+                              'placeholder': 'Ingrese sus nombres...',
+                          }
+                      ),
+                      'surnames': TextInput(
+                          attrs={
+                              'placeholder': 'Ingrese sus apellidos...',
+                          }
+                      ),
+                      'dni': TextInput(
+                          attrs={
+                              'placeholder': 'Ingrese su DNI...',
+                          }
+                      ),
+                      'date_brithday': DateInput(format='%Y-%m-%d',
+                                                 attrs={
+                                                     'value': datetime.now().strftime('%Y-%m-%d'),
+                                                 }
+                                                 ),
+                      'address': TextInput(
+                          attrs={
+                              'placeholder': 'Ingrese su dirección',
+                          }
+                      ),
+                      'gender': Select()
+                  },
+        exclude = ['user_updated', 'user_creation']
 
     # redefino el metodo save
     def save(self, commit=True):
@@ -188,6 +188,7 @@ class TestForm(Form):
         'style': 'width: 100%'
     }))
 
+
 class SaleForm(ModelForm):
     """
     Formulario de Sale/Venta
@@ -195,38 +196,52 @@ class SaleForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for form in self.visible_fields():                     #con esto voy a evitar estar definiendo el tipo de clase del fomulario para cada dato del modelo, esta es una forma, la otra forma es con una libreria llamada widget_tweaks que solo se trabaja desde el front
-           form.field.widget.attrs['class'] = 'form-control'                #como voy a hacer uso de la libreria 'widget_tweaks' solo comento las lineas
-           form.field.widget.attrs['autocomplete'] = 'off'
+        # for form in self.visible_fields():                     #con esto voy a evitar estar definiendo el tipo de clase del fomulario para cada dato del modelo, esta es una forma, la otra forma es con una libreria llamada widget_tweaks que solo se trabaja desde el front
+        #   form.field.widget.attrs['class'] = 'form-control'                #como voy a hacer uso de la libreria 'widget_tweaks' solo comento las lineas
+        #   form.field.widget.attrs['autocomplete'] = 'off'
+        ##forma 1
+        # self.fields['client'].widget.attrs['autofocus'] = True  # poneme el foco en el name
+        # self.fields['client'].widget.attrs['class'] =  'form-control select2'
+        # self.fields['client'].widget.attrs['style'] =  'width: 100%'
 
-        #forma 1
-        self.fields['client'].widget.attrs['autofocus'] = True  # poneme el foco en el name
-        self.fields['client'].widget.attrs['class'] =  'form-control select2'
-        self.fields['client'].widget.attrs['style'] =  'width: 100%'
-
-        #forma 2 -> trabajamos con el plugin de tempus dominus
-        self.fields['sale_date'].widget.attrs={
-            'autocomplete': 'off',
-            'class':'form-control datetimepicker-input', #hago referencia al campo de la libreria tempus dominus de bootstrap para poder manejar mejor la fecha
-            'id':'sale_date', #si no le pongo id el por defecto será id_sale_date
-            'data-target': '#sale_date',
-            'data_toogle':'datetimepicker',
-
-        }
+        ##forma 2 -> trabajamos con el plugin de tempus dominus
+        # self.fields['date_joined'].widget.attrs={
+        #    'autocomplete': 'off',
+        #    'class':'form-control datetimepicker-input', #hago referencia al campo de la libreria tempus dominus de bootstrap para poder manejar mejor la fecha
+        #    'id': 'date_joined', #si no le pongo id el por defecto será id_sale_date
+        #    'data-target': '#date_joined',
+        #    'data_toggle': 'datetimepicker',
+        # }
 
     class Meta:
         model = Sale
         fields = '__all__'
         widgets = {  # con esto personalizo el tipo de entrada de dato de formulario, si es textarea, textinput
-            'client':Select(attrs={
-                    'class': 'form-control',
-                    'style': 'width:100%',
-                }),
-            'sale_date': DateInput(format='%Y-%m-%d',
+            'client': Select(attrs={
+                'class': 'form-control select2',
+                'style': 'width:100%',
+            }),
+            'date_joined': DateInput(
+                format='%Y-%m-%d',
                 attrs={
-                    'class': 'form-control',
-                    'value': datetime.now().strftime('%Y-%m-%d'), #valor por defecto
+                    'value': datetime.now().strftime('%Y-%m-%d'),
+                    'autocomplete': 'off',
+                    #trabajamos con el plugin de tempus dominus
+                    'class': 'form-control datetimepicker-input', #hago referencia al campo de la libreria tempus dominus de bootstrap para poder manejar mejor la fecha
+                    'id': 'date_joined', #con este id lo llamo en el form.js del sale
+                    'data-target': '#date_joined',
+                    'data-toggle': 'datetimepicker'
                 }
-                ),
+            ),
+            'iva': TextInput(attrs={ #de tipo text pq es numérico por defecto
+                'class': 'form-control',
+            }),
+            'subtotal': TextInput(attrs={
+                'readonly': True, #solo lectura
+                'class': 'form-control',
+            }),
+            'total': TextInput(attrs={
+                'readonly': True,
+                'class': 'form-control',
+            })
         }
-

@@ -6,9 +6,15 @@
     <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
     <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"> </script>
     <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"> </script>
-    <script src="{% static 'lib/moment-2.25.3/moment.js' %}"> </script>
+    {#Plugin moment#}
+    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"> </script>
+    {#Plugin tempusdominus -> para el calendario de la factura#}
     <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"> </script>
     <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+    {#Plugin touchspin#}
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"> </script>
+    <link href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"/>
+    {#Lógica de la factura#}
     <script src="{% static 'sale/js/form.js' %}"> </script>
 {% endblock %}
 
@@ -36,8 +42,8 @@
                                 <label>Buscador de productos: </label>
                                 <div class="input-group">
                                     <input type="text" class="form-control"
-                                           placeholder="Ingrese una descripción de producto" autocomplete="off">
-                                    <span class="input-group-append">
+                                           placeholder="Ingrese una descripción de producto" autocomplete="off"/>
+                                     <span class="input-group-append">
                                         <button type="button" class="btn btn-danger btn-flat"><i
                                                 class="fas fa-times"></i></button>
                                     </span>
@@ -71,7 +77,7 @@
                         <div class="card-body">
                          <div class="form-group">
                              <label>Fecha de venta:</label>
-                             {{ form.sale_date }} {# Llamo al campo del forms.py del SaleForm #}
+                             {{ form.date_joined }} {# Llamo al campo del forms.py del SaleForm #}
                              <label>Cliente:</label>
                             {{ form.client }}
                              <label>Subtotal:</label>
