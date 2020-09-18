@@ -7,11 +7,28 @@ let vents = {
         total: 0.00,
         products: [],
     },
+    calculate_invoice: function(){ //calcular factura
+        let subtotal = 0.00;
+        let iva = $('input[name="iva"]').val(); //lo definí en create.html, un iva calculado
+        $.each(this.items.products,function (pos,dict) {
+           dict.subtotal = dict.cant * parseFloat(dict.pvp);
+           subtotal += dict.subtotal;
+        });
+        //valores de los inputs
+        this.items.subtotal = subtotal;
+        this.items.iva = this.items.subtotal*iva;
+        this.items.total = this.items.iva + this.items.subtotal;
+        //inputs de la factura
+        $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2)); //agrego al input el subtotal
+        $('input[name="ivacalc"]').val(this.items.iva.toFixed(2)); //el iva calculado que defini en el create html, es igual al iva
+        $('input[name="total"]').val(this.items.total.toFixed(2)); //el iva calculado que defini en el create html, es igual al iva
+    },
     add: function (item) {
         this.items.products.push(item);
         this.list();
     },
     list: function () {
+        this.calculate_invoice();
          $('#tablaProductos').DataTable({
         responsive:true,
         autoWidth:false,
@@ -76,17 +93,20 @@ $(function () {
         locale: 'es',
         maxDate: moment().format("YYYY-MM-DD") //fecha límite
     });
-
+    //------------------------------------------ IVA ------------------------------
     $("input[name='iva']").TouchSpin({ //Touchspin para el iva
-        default: 21,
         min: 0,
         max: 100,
-        step: 0.1,
+        step: 0.01,
         decimals: 2,
         boostat: 5,
         maxboostedstep: 10,
         postfix: '%'
-    });
+    }).on('change',function () {
+        vents.calculate_invoice(); //cuando se cambie el iva con los botones arriba o abajo, o le demos un valor nuevo que me calcule de nuevo la factura
+    })
+
+        .val(0.21); //defino el iva en 21% por defecto
 
     //busqueda de productos lo hacemos mediante la libreria jqueryui para usar el autocomplete
     $('input[name="search"]').autocomplete({

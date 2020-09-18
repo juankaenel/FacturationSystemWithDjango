@@ -28,7 +28,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
             action = request.POST['action']
             if action == 'search_products':
                 data=[]
-                prods = Product.objects.filter(name__icontains=request.POST['term']) #guardo los productos que vienen por el form.js en la variable term
+                prods = Product.objects.filter(name__icontains=request.POST['term'])[0:10] #guardo los productos que vienen por el form.js en la variable term pero solo diez productos
                 for i in prods:
                     item = i.toJSON()
                     item['value'] = i.name #el autocomplete tiene una variable value que necesita para poder presentarse en la busqueda cuando se va tecleando
