@@ -35,6 +35,5 @@ $(function () {
             //alert('se cargó la tabla crack');
         }
 
-    })
-
-})
+    });
+});

@@ -27,7 +27,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         try:
             action = request.POST['action']
             if action == 'search_products':
-                data:[]
+                data=[]
                 prods = Product.objects.filter(name__icontains=request.POST['term']) #guardo los productos que vienen por el form.js en la variable term
                 for i in prods:
                     item = i.toJSON()
