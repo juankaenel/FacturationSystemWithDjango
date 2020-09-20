@@ -68,11 +68,20 @@ let vents = {
                 orderable:false,
                 render: function (data,type,row) { //desde acá le mandamos los botones y las rutas
                     //row.cant hace referencia a la cantidad q definí de productos
-                    return '<input type="text" name="cant" class="form-control form-control-sm" value="'+row.cant+'" autocomplete="off">';
+                    return '<input type="text" name="cant" class="form-control form-control-sm input-sm" value="'+row.cant+'" autocomplete="off">';
                 },
 
             },
         ],
+        rowCallback(row,data,displayNum,displayIndex,dataIndex){
+        //con rowcallback puedo acceder a los datos del datatable
+        //busco en la fila el input cant
+            $(row).find('input[name="cant"]').TouchSpin({
+                min: 0,
+                max: 100,
+                step: 0.01,
+                });
+        },
         initComplete:function (settings,json) { //se ejecuta cuando se carga la tabla
             //alert('se cargó la tabla crack');
         }
@@ -143,5 +152,12 @@ $(function () {
         }
 
     });
+
+    //evento cantidad
+    $('#tablaProductos tbody').on('change', 'input[name="cant"]',function () {
+        console.clear();
+        let cant = parseInt($(this).val());
+
+    })
 
 });
