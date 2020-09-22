@@ -1,3 +1,4 @@
+let tblProducts; //le asigno a mi tabla del list
 let vents = {
     items: { //diccionario con tod o lo que tiene mi cabacera y mi detalle
         client: '',
@@ -11,6 +12,7 @@ let vents = {
         let subtotal = 0.00;
         let iva = $('input[name="iva"]').val(); //lo definí en create.html, un iva calculado
         $.each(this.items.products,function (pos,dict) {
+            dict.pos = pos; //obtengo la posicion a medida que voy iterando
            dict.subtotal = dict.cant * parseFloat(dict.pvp);
            subtotal += dict.subtotal;
         });
@@ -29,7 +31,7 @@ let vents = {
     },
     list: function () {
         this.calculate_invoice();
-         $('#tablaProductos').DataTable({
+       tblProducts =  $('#tablaProductos').DataTable({
         responsive:true,
         autoWidth:false,
         destroy:true,
@@ -68,7 +70,7 @@ let vents = {
                 orderable:false,
                 render: function (data,type,row) { //desde acá le mandamos los botones y las rutas
                     //row.cant hace referencia a la cantidad q definí de productos
-                    return '<input type="text" name="cant" class="form-control form-control-sm input-sm" value="'+row.cant+'" autocomplete="off">';
+                    return '<input type="text" name="cant" class="form-control form-control-sm input-sm" value="' + row.cant + '" autocomplete="off">';
                 },
 
             },
@@ -77,9 +79,9 @@ let vents = {
         //con rowcallback puedo acceder a los datos del datatable
         //busco en la fila el input cant
             $(row).find('input[name="cant"]').TouchSpin({
-                min: 0,
+                min: 1,
                 max: 100,
-                step: 0.01,
+                step: 1,
                 });
         },
         initComplete:function (settings,json) { //se ejecuta cuando se carga la tabla
@@ -140,7 +142,7 @@ $(function () {
         minLength:1,
         select: function (event,ui) {
             event.preventDefault();
-            console.clear();
+            //console.clear();
             ui.item.cant = 1; //defino la cantidad de productos como 1 debido a que no se solicita la cantidad pero se debe mostrar en la tabla
             ui.item.subtotal=0.00; //defino el subtotal
             //console.log(ui.item); //imprimo lo que me llega por la búsqueda
@@ -155,9 +157,22 @@ $(function () {
 
     //evento cantidad
     $('#tablaProductos tbody').on('change', 'input[name="cant"]',function () {
-        console.clear();
         let cant = parseInt($(this).val());
+        // ----- primera forma de obtener la posición y la cantidad -----
+        let tr = tblProducts.cell($(this).closest('td,li')).index(); //hace referencia a la fila que necesito manejar
+        //console.log(tr);
+        //let data = tblProducts.row(tr.row).data(); //accedo al objeto de la fila
+        vents.items.products[tr.row].cant = cant; //con el tr ya controlado actualizo la cantidad de productos
+        //console.log(vents.items.products);
 
+        //---- segunda forma ----
+        //vents.items.products[data.pos].cant = cant; //es lo mismo que obtenerlo como lo hice con el tr, pos se controla en el $.each del calculate invoice, por cada iteración obtengo la posición de la fila
+        //console.log(vents.items.products);
+
+        //tanto data.pos como tr.row obtienen la posición de la fila que necesito actualizar la cantidad
+
+        vents.calculate_invoice();
+        $('td:eq(5)',tblProducts.row(tr.row).node()).html('$'+vents.items.products[tr.row].subtotal.toFixed(2)); //accedo a la posicion 5 de mi row, que en este caso va a el subtotal
     })
 
 });
