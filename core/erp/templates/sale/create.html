@@ -4,21 +4,21 @@
     {#Librería select2 #}
     <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
-    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"> </script>
-    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"> </script>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
     {#Plugin moment#}
-    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"> </script>
+    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
     {#Plugin tempusdominus -> para el calendario de la factura#}
-    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"> </script>
+    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
     <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
     {#Plugin touchspin#}
-    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"> </script>
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
     <link href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"/>
     {#Plugin jqueryui para poder usar el autocomplete#}
-    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"> </script>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
     <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
     {#Lógica de la factura#}
-    <script src="{% static 'sale/js/form.js' %}"> </script>
+    <script src="{% static 'sale/js/form.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -47,13 +47,17 @@
                                     <!--el name search es para llamarlo con el autocomplete declarado en el form.js-->
                                     <input type="text" class="form-control" name="search"
                                            placeholder="Ingrese una descripción de producto" autocomplete="off"/>
-                                     <span class="input-group-append">
+                                    <span class="input-group-append">
                                         <button type="button" class="btn btn-danger btn-flat"><i
                                                 class="fas fa-times"></i></button>
                                     </span>
                                 </div>
                             </div>
                             <hr>
+                            {# btnRemoveAll -> la lógica la programo en el form.js#}
+                            <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll mb-2">Eliminar todos mis
+                                items
+                                <i class="fas fa-trash"></i></button>
                             <!--con el id de la tabla le daré la logica del listado en form.js-->
                             <table class="table" id="tablaProductos">
                                 <thead>
@@ -80,37 +84,38 @@
                             <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
                         </div>
                         <div class="card-body">
-                         <div class="form-group">
-                             <label>Fecha de venta: </label>
-                             {{ form.date_joined }} {# Llamo al campo del forms.py del SaleForm #}
-                             <label>Cliente:</label>
-                            {{ form.client }}
-                             <label>Subtotal:</label>
-                            {{ form.subtotal }}
-                             <label>IVA:</label>
-                            {{ form.iva }}
-                              <label>IVA Calculado:</label>
-                             <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
-                             <label>Total:</label>
-                            {{ form.total }}
+                            <div class="form-group">
+                                <label>Fecha de venta: </label>
+                                {{ form.date_joined }} {# Llamo al campo del forms.py del SaleForm #}
+                                <label>Cliente:</label>
+                                {{ form.client }}
+                                <label>Subtotal:</label>
+                                {{ form.subtotal }}
+                                <label>IVA:</label>
+                                {{ form.iva }}
+                                <label>IVA Calculado:</label>
+                                <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
+                                <label>Total:</label>
+                                {{ form.total }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <div class="card-footer">
-            {% block buttons_list %}
-                <!--esto sirve para que las páginas puedan usar los botones a su gusto y hereden lo q necesiten-->
-                <a class="btn btn-primary btn-flat " id="btnTest">
-                    <!--create_url la defini en la views de product en ListView-->
-                    <i class="fas fa-plus"></i> Nuevo registro
-                </a>
-                <a href="{{ list_url }}" class="btn btn-success btn-flat">
-                    <i class="fas fa-sync"></i> Actualizar
-                </a>
-            {% endblock %}
+            <div class="card-footer">
+                {% block buttons_list %}
+                    <!--esto sirve para que las páginas puedan usar los botones a su gusto y hereden lo q necesiten-->
+                    <a class="btn btn-primary btn-flat " id="btnTest">
+                        <!--create_url la defini en la views de product en ListView-->
+                        <i class="fas fa-plus"></i> Nuevo registro
+                    </a>
+                    <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </a>
+                {% endblock %}
+            </div>
         </div>
     </div>
 {% endblock %}

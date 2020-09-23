@@ -67,3 +67,34 @@ function submitWithajax(url, title, content, parameters, callback) {
         }
     })
 }
+
+//Acción para preguntar si desea eliminar todos los productos del detalle de la factura
+function alert_action(title, content, callback) {
+    $.confirm({
+        theme: 'material',
+        title: title,
+        icon: 'fa fa-info',
+        content: content,
+        columnClass: 'medium',
+        typeAnimated: true,
+        cancelButtonClass: 'btn-primary',
+        draggable: true,
+        dragWindowBorder: false,
+        buttons: {
+            info: {
+                text: "Si",
+                btnClass: 'btn-primary',
+                action: function () {
+                    callback(); //el callback viene a ser la acción para vaciar la tabla
+                }
+            },
+            danger: {
+                text: "No",
+                btnClass: 'btn-red',
+                action: function () {
+
+                }
+            },
+        }
+    })
+}

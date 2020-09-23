@@ -51,7 +51,7 @@ let vents = {
                 class: 'text-center',
                 orderable:false,
                 render: function (data,type,row) { //desde acá le mandamos los botones y las rutas
-                    return '<a rel="remove" class="btn btn-danger btn-xs btn-flat"> <i class="fas fa-trash-alt"></i></a>';
+                    return '<a rel="remove" class="btn btn-danger btn-xs btn-flat" style="color:white"> <i class="fas fa-trash-alt"></i></a>';
                 },
 
             },
@@ -155,8 +155,28 @@ $(function () {
 
     });
 
-    //evento cantidad
-    $('#tablaProductos tbody').on('change', 'input[name="cant"]',function () {
+    //botón eliminar todos los items
+    $('.btnRemoveAll').on('click',function () {
+        //llamo al alert_action de functions.js
+        if(vents.items.products.length === 0) return false; //si no hay productos no puedo usar el botón
+        alert_action('Notificación','¿Estás seguro de eliminar todos los items de tu detalle?',function () {
+        vents.items.products = []; //vacio los productos
+        vents.list();
+        });
+    })
+
+    $('#tablaProductos tbody')
+        //botón eliminar
+        .on('click','a[rel="remove"]',function () {
+        let tr = tblProducts.cell($(this).closest('td,li')).index();
+        //llamo al alert_action
+        alert_action('Notificación','¿Estás seguro de eliminar el producto de tu detalle?',function () {
+        vents.items.products.splice(tr.row,1) //tr.row pos actual
+            vents.list();
+        });
+        })
+        //evento cantidad
+        .on('change', 'input[name="cant"]',function () {
         let cant = parseInt($(this).val());
         // ----- primera forma de obtener la posición y la cantidad -----
         let tr = tblProducts.cell($(this).closest('td,li')).index(); //hace referencia a la fila que necesito manejar
