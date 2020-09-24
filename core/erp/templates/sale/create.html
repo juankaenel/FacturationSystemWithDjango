@@ -22,100 +22,103 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">
-                {% if action == 'add' %}
-                    <i class="fas fa-plus"></i>
-                {% else %}
-                    <i class="fas fa-edit"></i>
-                {% endif %}
-                {{ title }}
-            </h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card card-secondary">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle de productos</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Buscador de productos: </label>
-                                <div class="input-group">
-                                    <!--el name search es para llamarlo con el autocomplete declarado en el form.js-->
-                                    <input type="text" class="form-control" name="search"
-                                           placeholder="Ingrese una descripción de producto" autocomplete="off"/>
-                                    <span class="input-group-append">
+    <form method="post">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle de productos</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Buscador de productos: </label>
+                                    <div class="input-group">
+                                        <!--el name search es para llamarlo con el autocomplete declarado en el form.js-->
+                                        <input type="text" class="form-control" name="search"
+                                               placeholder="Ingrese una descripción de producto" autocomplete="off"/>
+                                        <span class="input-group-append">
                                         <button type="button" class="btn btn-danger btn-flat"><i
                                                 class="fas fa-times"></i></button>
                                     </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                {# btnRemoveAll -> la lógica la programo en el form.js#}
+                                <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll mb-2">Eliminar
+                                    todos mis
+                                    items
+                                    <i class="fas fa-trash"></i></button>
+                                <!--con el id de la tabla le daré la logica del listado en form.js-->
+                                <table class="table" id="tablaProductos">
+                                    <thead>
+                                    <tr>
+                                        {#Columnas#}
+                                        <th>Eliminar</th>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Precio de Venta</th>
+                                        <th>Cantidad</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" name="action" value="{{ action }}">
+                                <div class="form-group">
+                                    <label>Fecha de venta: </label>
+                                    {{ form.date_joined }} {# Llamo al campo del forms.py del SaleForm #}
+                                    <label>Cliente:</label>
+                                    {{ form.client }}
+                                    <label>Subtotal:</label>
+                                    {{ form.subtotal }}
+                                    <label>IVA:</label>
+                                    {{ form.iva }}
+                                    <label>IVA Calculado:</label>
+                                    <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
+                                    <label>Total:</label>
+                                    {{ form.total }}
                                 </div>
                             </div>
-                            <hr>
-                            {# btnRemoveAll -> la lógica la programo en el form.js#}
-                            <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll mb-2">Eliminar todos mis
-                                items
-                                <i class="fas fa-trash"></i></button>
-                            <!--con el id de la tabla le daré la logica del listado en form.js-->
-                            <table class="table" id="tablaProductos">
-                                <thead>
-                                <tr>
-                                    {#Columnas#}
-                                    <th>Eliminar</th>
-                                    <th>Producto</th>
-                                    <th>Categoría</th>
-                                    <th>Precio de Venta</th>
-                                    <th>Cantidad</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="card card-secondary">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Fecha de venta: </label>
-                                {{ form.date_joined }} {# Llamo al campo del forms.py del SaleForm #}
-                                <label>Cliente:</label>
-                                {{ form.client }}
-                                <label>Subtotal:</label>
-                                {{ form.subtotal }}
-                                <label>IVA:</label>
-                                {{ form.iva }}
-                                <label>IVA Calculado:</label>
-                                <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
-                                <label>Total:</label>
-                                {{ form.total }}
-                            </div>
-                        </div>
-                    </div>
+
+                <div class="card-footer">
+                    {% block buttons_list %}
+                        <!--esto sirve para que las páginas puedan usar los botones a su gusto y hereden lo q necesiten-->
+                        <button type="submit" class="btn btn-primary btn-flat " id="btnTest">
+                            <i class="fas fa-save"></i> Guardar Registro
+                        </button>
+                        <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                            <i class="fas fa-sync"></i> Actualizar
+                        </a>
+                    {% endblock %}
                 </div>
-            </div>
-
-
-            <div class="card-footer">
-                {% block buttons_list %}
-                    <!--esto sirve para que las páginas puedan usar los botones a su gusto y hereden lo q necesiten-->
-                    <a class="btn btn-primary btn-flat " id="btnTest">
-                        <!--create_url la defini en la views de product en ListView-->
-                        <i class="fas fa-plus"></i> Nuevo registro
-                    </a>
-                    <a href="{{ list_url }}" class="btn btn-success btn-flat">
-                        <i class="fas fa-sync"></i> Actualizar
-                    </a>
-                {% endblock %}
             </div>
         </div>
-    </div>
+    </form>
 {% endblock %}
