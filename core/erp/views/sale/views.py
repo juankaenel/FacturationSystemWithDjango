@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -36,23 +37,25 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                     item['value'] = i.name #el autocomplete tiene una variable value que necesita para poder presentarse en la busqueda cuando se va tecleando
                     data.append(item) #agrego el producto iterado al array data
             elif action == 'add':
-                vents = json.loads(request.POST['vents'])
-                sale = Sale()
-                sale.date_joined = vents['date_joined']
-                sale.client_id = vents['client']
-                sale.subtotal = float(vents['subtotal'])
-                sale.iva = float(vents['iva'])
-                sale.total = float(vents['total'])
-                sale.save()
-
-                for i in vents['products']:
-                    detalle = DetSale()
-                    detalle.sale_id = sale.id
-                    detalle.prod_id = i['id']
-                    detalle.cant = int(i['cant'])
-                    detalle.price = float(i['pvp'])
-                    detalle.subtotal = float(i['subtotal'])
-                    detalle.save()
+                with transaction.atomic(): #meto toda la lógica dentro del transaction, esto me permite volver atrás en caso de que ocurra un error en el detalle o la factura, entonces no se guarda nada en caso de error.
+                    #venta
+                    vents = json.loads(request.POST['vents'])
+                    sale = Sale()
+                    sale.date_joined = vents['date_joined']
+                    sale.client_id = vents['client']
+                    sale.subtotal = float(vents['subtotal'])
+                    sale.iva = float(vents['iva'])
+                    sale.total = float(vents['total'])
+                    sale.save()
+                    #detalle de venta
+                    for i in vents['products']:
+                        detalle = DetSale()
+                        detalle.sale_id = sale.id
+                        detalle.prod_id = i['id']
+                        detalle.cant = int(i['cant'])
+                        detalle.price = float(i['pvp'])
+                        detalle.subtotal = float(i['subtotal'])
+                        detalle.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:

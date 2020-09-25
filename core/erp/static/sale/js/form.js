@@ -175,6 +175,7 @@ $(function () {
                 vents.list();
             });
         })
+
         //evento cantidad
         .on('change', 'input[name="cant"]', function () {
             let cant = parseInt($(this).val());
@@ -194,9 +195,21 @@ $(function () {
             vents.calculate_invoice();
             $('td:eq(5)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2)); //accedo a la posicion 5 de mi row, que en este caso va a el subtotal
         })
-        //evento submit
-        $('form').on('submit', function (e) {
+
+    //botón limpiar input
+    $('.btnClearSearch').on('click',function () {
+        $('input[name="search"]').val('').focus();
+    });
+    //evento submit
+    $('form').on('submit', function (e) {
         e.preventDefault();
+
+        //controlar que no se envíe form vacío
+        if (vents.items.products.length === 0) {
+            message_error('Debe al menos tener un item en su detalle de venta');
+            return false;
+        }
+
 
         vents.items.date_joined = $('input[name="date_joined"]').val();
         vents.items.client = $('select[name="client"]').val();
@@ -208,5 +221,8 @@ $(function () {
             location.href = '/erp/dashboard';
         });
     })
+
+    //listamos el datatable
+    vents.list();
 
 });
