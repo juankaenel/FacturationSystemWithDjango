@@ -4,7 +4,7 @@ from core.erp.views.client.views import ClientListView, ClientCreateView, Client
 from core.erp.views.dashboard.views import *
 from core.erp.views.product.views import *
 #nombre de las rutas de erp
-from core.erp.views.sale.views import SaleCreateView
+from core.erp.views.sale.views import SaleCreateView, SaleListView, SaleDeleteView
 
 app_name = 'erp'
 
@@ -27,6 +27,8 @@ urlpatterns=[
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
     #sale
     path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
+    path('sale/list/', SaleListView.as_view(), name='sale_list'),
+    path('sale/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale_delete'),
     #home
     path('dashboard/', DashboardView.as_view(),name='dashboard'),
 

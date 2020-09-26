@@ -127,6 +127,16 @@ class Sale(models.Model):
         db_table = 'venta'
         ordering = ['id']
 
+    def toJson(self):
+        item = model_to_dict(self)
+        item['client'] = self.client.toJson()
+        item['subtotal'] = format(self.subtotal, '.2f')
+        item['iva'] = format(self.iva, '.2f')
+        item['total'] = format(self.total, '.2f')
+        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
+        item['det'] = [i.toJson() for i in self.detsale_set.all()] #DetSale.objects.filter(sale_id=self.id)   -> recorro todos los detalles de la factura accedo a la relación de los detalles del producto
+        return item
+
 
 class DetSale(models.Model):
     """
@@ -146,3 +156,10 @@ class DetSale(models.Model):
         verbose_name_plural = 'Detalles de ventas'
         db_table = 'detalle_venta'
         ordering = ['id']
+
+    def toJson(self):
+        item = model_to_dict(self, exclude=['sale']) #excluime la relación del metodo sale
+        item['prod'] = self.prod.toJSON() #accedo a la relación y la paso a json
+        item['price'] = format(self.price, '.2f')
+        item['subtotal'] = format(self.subtotal, '.2f')
+        return item
