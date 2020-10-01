@@ -3,7 +3,8 @@ let tblSale;
 $(function () {
 
     tblSale = $('#data').DataTable({
-        responsive: true,
+        //responsive: true, -> comentamos esto asi nos funciona el responsive de la tabla de detalle
+        scrollX:true, //aplicamos el scroll para que se adapte ya que no tiene diseño responsivo
         autoWidth: false,
         destroy: true,
         deferRender: true,
@@ -57,21 +58,28 @@ $(function () {
 
     //método format
     function format(d) {
-        // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-            '<tr>' +
-            '<td>Full name:</td>' +
-            '<td>' + d.name + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Extension number:</td>' +
-            '<td>' + d.extn + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Extra info:</td>' +
-            '<td>And any further details here (images etc)...</td>' +
-            '</tr>' +
-            '</table>';
+        console.log(d);
+        let html = '<table class="table">';
+        //cabecera
+        html += '<thead class="thead-dark">';
+        html += '<tr><th scope="col">Productos</th>';
+        html += '<th scope="col">Categoría</th>';
+        html += '<th scope="col">Precio de venta</th>';
+        html += '<th scope="col">Cantidad</th>';
+        html += '<th scope="col">Subtotal</th></tr>';
+        html += '</thead>';
+        //info de la tabla
+        $.each(d.det, function(key,value){
+            html += '<tr>';
+            html += '<td>'+value.prod.name+'</td>';
+            html += '<td>'+value.prod.cat.name+'</td>';
+            html += '<td>'+value.price+'</td>';
+            html += '<td>'+value.cant+'</td>';
+            html += '<td>'+value.subtotal+'</td>';
+            html += '</tr>';
+        });//itero los detalles de venta
+        html += '</tbody>';
+        return html;
     }
 
 
@@ -128,7 +136,8 @@ $(function () {
             //muestro el modal de detalle cuando se hace click
             $('#myModelDet').modal('show');
             })
-            //botón del datatable
+
+            //botón del datatable verde para acceder a mayor información de la venta -> https://datatables.net/examples/api/row_details.html
             .on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
                 var row = tblSale.row(tr);
