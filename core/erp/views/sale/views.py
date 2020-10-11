@@ -104,6 +104,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         context['action'] = 'add'
+        context['det'] = []
         return context
 
 class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
@@ -133,13 +134,14 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                 with transaction.atomic(): #meto toda la lógica dentro del transaction, esto me permite volver atrás en caso de que ocurra un error en el detalle o la factura, entonces no se guarda nada en caso de error.
                     #venta
                     vents = json.loads(request.POST['vents'])
-                    sale = Sale()
+                    sale = self.get_object()
                     sale.date_joined = vents['date_joined']
                     sale.client_id = vents['client']
                     sale.subtotal = float(vents['subtotal'])
                     sale.iva = float(vents['iva'])
                     sale.total = float(vents['total'])
                     sale.save()
+                    sale.detsale_set.all().delete() #accedo a la relación detalle de venta, traigo todos los productos y los borro
                     #detalle de venta
                     for i in vents['products']:
                         detalle = DetSale()

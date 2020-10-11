@@ -60,7 +60,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def toJSON(self):
+    def toJson(self):
         item = model_to_dict(self)
         item['cat'] = self.cate.toJson()
         item['image'] = self.get_image()
@@ -159,7 +159,7 @@ class DetSale(models.Model):
 
     def toJson(self):
         item = model_to_dict(self, exclude=['sale']) #excluime la relación del metodo sale
-        item['prod'] = self.prod.toJSON() #accedo a la relación y la paso a json
+        item['prod'] = self.prod.toJson() #accedo a la relación y la paso a json
         item['price'] = format(self.price, '.2f')
         item['subtotal'] = format(self.subtotal, '.2f')
         return item

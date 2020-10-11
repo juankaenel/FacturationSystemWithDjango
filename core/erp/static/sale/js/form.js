@@ -223,6 +223,6 @@ $(function () {
     })
 
     //listamos el datatable
-    vents.list();
+    //vents.list();
 
 });
