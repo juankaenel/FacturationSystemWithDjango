@@ -1,17 +1,25 @@
 import json
-
+#django
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView, View
 
+#core
 from core.erp.forms import SaleForm
 from core.erp.mixins import ValidatePermissionRequiredMixin
 from core.erp.models import Sale, Product, DetSale
 
+#xhtml2pdf
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Sale
@@ -202,3 +210,21 @@ class SaleDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Delete
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         return context
+
+class SaleInvoicePdfView(View):
+    def get(self,request,*args,**kwargs):
+        try:
+            template = get_template('sale/invoice.html') #me devuelve el objeto en base a lo que le paso
+            context = {'title':'PDF DJANGO'}
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
+            # crear el pdf
+            pisa_status = pisa.CreatePDF(
+                html, dest=response)
+            if pisa_status.err:
+                return HttpResponse('Tenemos algunos errores <pre>' + html + '</pre>')
+            return response #retorna el response, este contiene el pdf
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('erp:sale_list'))
