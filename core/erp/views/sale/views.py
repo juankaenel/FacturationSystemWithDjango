@@ -215,7 +215,10 @@ class SaleInvoicePdfView(View):
     def get(self,request,*args,**kwargs):
         try:
             template = get_template('sale/invoice.html') #me devuelve el objeto en base a lo que le paso
-            context = {'title':'PDF DJANGO'}
+            context = {
+                'sale': Sale.objects.get(pk=self.kwargs['pk']),
+                'comp': {'name': 'Devkoders', 'ruc': '99999', 'address': 'Pres. Roque Saénz Peña, Chaco, Argentina'}
+            }
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
